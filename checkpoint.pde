@@ -8,6 +8,11 @@ color green = #56D32D;
 color darkBlue = #021239;
 // animation variables
 int bcolour;
+float sunX, sunY, moonX, moonY;
+
+
+
+
 
 
 
@@ -37,6 +42,9 @@ void draw(){
   sun();
   trunk();
   leaves();
+  sun();
+  moon();
+
   
 
 }
@@ -99,4 +107,9 @@ void leaves(){
   circle(130, 290, 50);
   circle(70, 250, 100);
 
-};
+}
+
+void moon(){
+  ellipse
+
+}
