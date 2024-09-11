@@ -1,8 +1,17 @@
 void patternOne() {
   background(0);
-  int x =0;
-  int y = 0;
-  circles();
+  int x =-50;
+  int y = -50;
+  while(y < 600){
+    x += 100;
+  
+  if(x >= 800){
+    x = -50;
+    y += 100;
+
+  }
+  circles(x, y);
+  }
 
 
 
@@ -18,16 +27,20 @@ void patternOne() {
   //  x += 200;
 }
 
-void circles() {
+void circles(int x, int y) {
+  pushMatrix();
+  translate(x, y);
   noFill();
-  stroke(255);
+  stroke(pink);
   strokeWeight(5);
   //middles
-  circle(400, 300, 200);
+  circle(0, 0, 100);
   //top two
-  circle(300, 200, 200);
-  circle(500, 200, 200);
+  circle(-50, -50, 100);
+  circle(50, -50, 100);
   //bottom two
-  
+  circle(-50, 50, 100);
+  circle(50, 50, 100);
+  popMatrix();
   
 }
