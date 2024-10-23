@@ -11,27 +11,42 @@ FPoly rightBorder;
 FPoly leftBorder;
 FBox topBorder;
 FPoly rightGoal;
+FPoly leftGoal;
 FBox p1;
 FBox p2;
 FCircle ball;
 boolean onGround;
 boolean onGround2;
+
+//scoring
+int greenScore;
+int whiteScore;
+boolean greenScored;
+boolean whiteScored;
 void setup() {
   size(800, 600);
   rectMode(CENTER);
   makeWorld();
-  
+
   //makeRightBorder();
   //makeLeftBorder();
   //makeTopBorder();
-  
+
   makeGround();
   makePlatform();
   makeRightGoal();
+  makeLeftGoal();
   makePlayer();
   makePlayerTwo();
   makeCircle();
   onGround = false;
+  
+  
+  //scoring
+  greenScore = 0;
+  whiteScore = 0;
+  greenScored = false;
+  whiteScored = false;
 }
 
 void draw() {
@@ -43,6 +58,15 @@ void draw() {
   handlePlayerInput2();
   checkIfGrounded();
   checkIfGrounded2();
+  
+  handleGreenScoring();
+  handleWhiteScoring();
+  fill(255);
+  textSize(50);
+  text(whiteScore, 200, 100);
+  fill(green);
+  text(greenScore, 600, 100);
+
 }
 
 void makeWorld() {
@@ -52,51 +76,49 @@ void makeWorld() {
   world.setEdges();
 }
 
-//void makeRightBorder() {
-//  rightBorder = new FPoly();
-//  rightBorder.vertex(width+5, height);
-//  rightBorder.vertex(width+5, 0);
-//  rightBorder.vertex(width-5, 0);
-//  rightBorder.vertex(width-5, height);
 
-//  rightBorder.setStatic(true);
-//  rightBorder.setFriction(0.1);
-//  rightBorder.setRestitution(1);
 
-//  world.add(rightBorder);
-//}
-
-//void makeLeftBorder() {
-//  leftBorder = new FPoly();
-//  leftBorder.vertex(5, height);
-//  leftBorder.vertex(5, 0);
-//  leftBorder.vertex(-5, 0);
-//  leftBorder.vertex(-5, height);
-
-//  leftBorder.setStatic(true);
-//  leftBorder.setFriction(0.1);
-//  leftBorder.setRestitution(1);
-
-//  world.add(leftBorder);
-//}
-
-//void makeTopBorder() {
-//  topBorder = new FBox(800, 10);
-//  topBorder.setPosition(400, 0);
-//  topBorder.setStatic(true);
-//  topBorder.setFriction(0.1);
-//  topBorder.setRestitution(1);
-
-//  world.add(topBorder);
-//}
-
-void makeRightGoal(){//LEFT OFF HERE*****
+void makeRightGoal() {
   rightGoal = new FPoly();
-  
+
   rightGoal.vertex(790, 100);
   rightGoal.vertex(800, 100);
   rightGoal.vertex(800, 400);
-  
+  rightGoal.vertex(790, 400);
+  rightGoal.vertex(790, 410);
+  rightGoal.vertex(795, 410);
+  rightGoal.vertex(795, 110);
+  rightGoal.vertex(790, 110);
+  rightGoal.setStatic(true);
+  rightGoal.setFillColor(green);
+  world.add(rightGoal);
+}
+
+void handleWhiteScoring(){
+  if(ball.getY() > 110 && ball.getY() < 410 && ball.getX() >= 770){
+      whiteScore += 1;
+  }
+}
+
+void makeLeftGoal() {
+  leftGoal = new FPoly();
+  leftGoal.vertex(10, 100);
+  leftGoal.vertex(0, 100);
+  leftGoal.vertex(0, 400);
+  leftGoal.vertex(10, 400);
+  leftGoal.vertex(10, 410);
+  leftGoal.vertex(5, 410);
+  leftGoal.vertex(5, 110);
+  leftGoal.vertex(10, 110);
+  leftGoal.setStatic(true);
+
+  world.add(leftGoal);
+}
+
+void handleGreenScoring(){
+  if(ball.getY() > 110 && ball.getY() < 410 && ball.getX() <= 30){
+      greenScore += 1;
+  }
 }
 
 void makeGround() {
