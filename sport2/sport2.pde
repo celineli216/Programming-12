@@ -10,7 +10,7 @@ FPoly ground;
 FPoly rightBorder;
 FPoly leftBorder;
 FBox topBorder;
-FPoly rightGoal;
+//FPoly rightGoal;
 FPoly leftGoal;
 FBox p1;
 FBox p2;
@@ -40,8 +40,8 @@ void setup() {
   makePlayerTwo();
   makeCircle();
   onGround = false;
-  
-  
+
+
   //scoring
   greenScore = 0;
   whiteScore = 0;
@@ -58,7 +58,7 @@ void draw() {
   handlePlayerInput2();
   checkIfGrounded();
   checkIfGrounded2();
-  
+
   handleGreenScoring();
   handleWhiteScoring();
   fill(255);
@@ -66,7 +66,6 @@ void draw() {
   text(whiteScore, 200, 100);
   fill(green);
   text(greenScore, 600, 100);
-
 }
 
 void makeWorld() {
@@ -79,24 +78,41 @@ void makeWorld() {
 
 
 void makeRightGoal() {
-  rightGoal = new FPoly();
+  FBox rightGoalm = new FBox(10, 150);
+  FBox rightGoalt = new FBox(50, 10);
+  FBox rightGoalb = new FBox(50, 10);
+  rightGoalm.setPosition(800, 250);
+  rightGoalt.setPosition(790, 175);
+  rightGoalb.setPosition(790, 325);
+  //rightGoal = new FPoly();
 
-  rightGoal.vertex(790, 100);
-  rightGoal.vertex(800, 100);
-  rightGoal.vertex(800, 400);
-  rightGoal.vertex(790, 400);
-  rightGoal.vertex(790, 410);
-  rightGoal.vertex(795, 410);
-  rightGoal.vertex(795, 110);
-  rightGoal.vertex(790, 110);
-  rightGoal.setStatic(true);
-  rightGoal.setFillColor(green);
-  world.add(rightGoal);
+  //rightGoal.vertex(790, 100);
+  //rightGoal.vertex(800, 100);
+  //rightGoal.vertex(800, 400);
+  //rightGoal.vertex(790, 400);
+  //rightGoal.vertex(790, 410);
+  //rightGoal.vertex(795, 410);
+  //rightGoal.vertex(795, 110);
+  //rightGoal.vertex(790, 110);
+
+
+  rightGoalm.setStatic(true);
+  rightGoalm.setFillColor(green);
+  world.add(rightGoalm);
+  rightGoalt.setStatic(true);
+  rightGoalt.setFillColor(green);
+  world.add(rightGoalt);
+  rightGoalm.setStatic(true);
+  rightGoalm.setFillColor(green);
+  world.add(rightGoalm);
+  rightGoalb.setStatic(true);
+  rightGoalb.setFillColor(green);
+  world.add(rightGoalb);
 }
 
-void handleWhiteScoring(){
-  if(ball.getY() > 110 && ball.getY() < 410 && ball.getX() >= 770){
-      whiteScore += 1;
+void handleWhiteScoring() {
+  if (ball.getY() > 110 && ball.getY() < 320 && ball.getX() >= 770) {
+    whiteScore += 1;
   }
 }
 
@@ -115,9 +131,9 @@ void makeLeftGoal() {
   world.add(leftGoal);
 }
 
-void handleGreenScoring(){
-  if(ball.getY() > 110 && ball.getY() < 410 && ball.getX() <= 30){
-      greenScore += 1;
+void handleGreenScoring() {
+  if (ball.getY() > 250 && ball.getY() < 410 && ball.getX() <= 30) {
+    greenScore += 1;
   }
 }
 
@@ -225,5 +241,6 @@ void makeCircle() {
   ball.setDensity(0.3);
   ball.setFriction(0.1);
   ball.setRestitution(1);
+  
   world.add(ball);
 }
