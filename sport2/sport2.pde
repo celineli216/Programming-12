@@ -11,7 +11,8 @@ FPoly rightBorder;
 FPoly leftBorder;
 FBox topBorder;
 //FPoly rightGoal;
-FPoly leftGoal;
+FPoly rightHoop;
+FPoly leftHoop;
 FBox p1;
 FBox p2;
 FCircle ball;
@@ -21,8 +22,15 @@ boolean onGround2;
 //scoring
 int greenScore;
 int whiteScore;
+int ballBounce;
 boolean greenScored;
 boolean whiteScored;
+
+//mode framework
+final int intro = 1;
+final int game = 2;
+final int win = 3;
+int mode;
 void setup() {
   size(800, 600);
   rectMode(CENTER);
@@ -34,8 +42,8 @@ void setup() {
 
   makeGround();
   makePlatform();
-  makeRightGoal();
-  makeLeftGoal();
+  makeRightHoop();
+  makeLeftHoop();
   makePlayer();
   makePlayerTwo();
   makeCircle();
@@ -47,25 +55,24 @@ void setup() {
   whiteScore = 0;
   greenScored = false;
   whiteScored = false;
+  
+  ballBounce = 1;
+  
+  //
+  mode = 1;
 }
 
 void draw() {
-  background(blue);
-
-  world.draw();
-  world.step();
-  handlePlayerInput();
-  handlePlayerInput2();
-  checkIfGrounded();
-  checkIfGrounded2();
-
-  handleGreenScoring();
-  handleWhiteScoring();
-  fill(255);
-  textSize(50);
-  text(whiteScore, 200, 100);
-  fill(green);
-  text(greenScore, 600, 100);
+ 
+  if(mode == 1){
+    intro();
+  }
+  else if(mode == 2){
+    game();
+  }
+  else{
+    win();
+  }
 }
 
 void makeWorld() {
@@ -77,64 +84,47 @@ void makeWorld() {
 
 
 
-void makeRightGoal() {
-  FBox rightGoalm = new FBox(10, 150);
-  FBox rightGoalt = new FBox(50, 10);
-  FBox rightGoalb = new FBox(50, 10);
-  rightGoalm.setPosition(800, 250);
-  rightGoalt.setPosition(790, 175);
-  rightGoalb.setPosition(790, 325);
-  //rightGoal = new FPoly();
+void makeRightHoop() {
+  rightHoop = new FPoly();
+  rightHoop.vertex(width-10, 100 +50);
+  rightHoop.vertex(width-10, 100 +75 +50);
+  rightHoop.vertex(width-75-10-5, 100+75 +50);
+  rightHoop.vertex(width-75-10-5, 100 +50);
+  rightHoop.vertex(width-75-10, 100 +50);
+  rightHoop.vertex(width-75-10, 100+75-5 +50);
+  rightHoop.vertex(width-10-5, 100+75-5 +50);
+  rightHoop.vertex(width-10-5, 100 +50);
 
-  //rightGoal.vertex(790, 100);
-  //rightGoal.vertex(800, 100);
-  //rightGoal.vertex(800, 400);
-  //rightGoal.vertex(790, 400);
-  //rightGoal.vertex(790, 410);
-  //rightGoal.vertex(795, 410);
-  //rightGoal.vertex(795, 110);
-  //rightGoal.vertex(790, 110);
-
-
-  rightGoalm.setStatic(true);
-  rightGoalm.setFillColor(green);
-  world.add(rightGoalm);
-  rightGoalt.setStatic(true);
-  rightGoalt.setFillColor(green);
-  world.add(rightGoalt);
-  rightGoalm.setStatic(true);
-  rightGoalm.setFillColor(green);
-  world.add(rightGoalm);
-  rightGoalb.setStatic(true);
-  rightGoalb.setFillColor(green);
-  world.add(rightGoalb);
+  rightHoop.setStatic(true);
+  rightHoop.setFillColor(green);
+  rightHoop.setFriction(1);
+ 
+  world.add(rightHoop);
 }
 
 void handleWhiteScoring() {
-  if (ball.getY() > 110 && ball.getY() < 320 && ball.getX() >= 770) {
-    whiteScore += 1;
-  }
+  if((int)ball.getY() > 170 && (int)ball.getY() < 175 && (int)ball.getX() > 740 && (int)ball.getX() < 760) whiteScore++;
 }
 
-void makeLeftGoal() {
-  leftGoal = new FPoly();
-  leftGoal.vertex(10, 100);
-  leftGoal.vertex(0, 100);
-  leftGoal.vertex(0, 400);
-  leftGoal.vertex(10, 400);
-  leftGoal.vertex(10, 410);
-  leftGoal.vertex(5, 410);
-  leftGoal.vertex(5, 110);
-  leftGoal.vertex(10, 110);
-  leftGoal.setStatic(true);
+void makeLeftHoop() {
+  leftHoop = new FPoly();
+  leftHoop.vertex(10, 100 +50);
+  leftHoop.vertex(10, 100 +75 +50);
+  leftHoop.vertex(75+10+5, 100+75 +50);
+  leftHoop.vertex(75+10+5, 100 +50);
+  leftHoop.vertex(75+10, 100 +50);
+  leftHoop.vertex(75+10, 100+75-5 +50);
+  leftHoop.vertex(10+5, 100+75-5 +50);
+  leftHoop.vertex(10+5, 100 +50);
 
-  world.add(leftGoal);
+  leftHoop.setStatic(true);
+  
+  leftHoop.setFriction(0.1);
+  world.add(leftHoop);
 }
 
 void handleGreenScoring() {
-  if (ball.getY() > 250 && ball.getY() < 410 && ball.getX() <= 30) {
-    greenScore += 1;
-  }
+   if((int)ball.getY() > 170 && (int)ball.getY() < 175 && (int)ball.getX() > 40 && (int)ball.getX() < 60) greenScore++;
 }
 
 void makeGround() {
@@ -240,7 +230,31 @@ void makeCircle() {
   ball.setPosition(400, 100);
   ball.setDensity(0.3);
   ball.setFriction(0.1);
-  ball.setRestitution(1);
-  
+  //ball.setRestitution(ballBounce);
+
   world.add(ball);
+}
+
+void handleBallBounce(){
+     if(ball.getY() <= 145 && ball.getY() >= 140 && ball.getX() < 75+10 && ball.getX() >10+5) ballBounce = 0;
+     ball.setRestitution(ballBounce);
+     if(ball.getY() <= 145 && ball.getY() >= 140 && width-75-10 <ball.getX() && ball.getX() < width-10-5) ballBounce = 0;
+   
+     
+
+}
+
+void contactStarted(FContact c) {
+  FBody body1 = c.getBody1();
+  FBody body2 = c.getBody2();
+
+  // Check if the ball collided with player 1
+  if ((body1 == ball && body2 == p1) || (body2 == ball && body1 == p1)) {
+    ball.setVelocity(ball.getVelocityX(), -500);  // Bounce the ball upwards
+  }
+
+  // Check if the ball collided with player 2
+  if ((body1 == ball && body2 == p2) || (body2 == ball && body1 == p2)) {
+    ball.setVelocity(ball.getVelocityX(), -500);  // Bounce the ball upwards
+  }
 }
