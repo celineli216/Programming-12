@@ -49,6 +49,7 @@ PImage court;
 
 PImage player1;
 PImage player2;
+PImage ballImg;
 
 void setup() {
   size(800, 600);
@@ -59,7 +60,10 @@ void setup() {
   court = loadImage("court.jpg");
   player1 = loadImage("player1.png");
   player2 = loadImage("player2.png");
-  player1.resize(50, 50);
+  ballImg = loadImage("ball.png");
+  player1.resize(100, 70);
+  player2.resize(100, 70);
+  ballImg.resize(50, 70);
   //=====
   makeWorld();
 
@@ -70,6 +74,7 @@ void setup() {
   makeRightHoop();
   makeLeftHoop();
   makePlayer();
+  
   makePlayerTwo();
   makeCircle();
   onGround = false;
