@@ -29,5 +29,5 @@ void keyReleased() {
   if (keyCode == DOWN) downkey = false;
   if (keyCode == RIGHT) rightkey = false;
   if (keyCode == LEFT) leftkey = false;
-  if (key == ' ') spacekey = false;
+  //if (key == ' ') spacekey = false;
 }
