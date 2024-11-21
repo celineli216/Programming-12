@@ -30,6 +30,12 @@ color bridgeBrown = #6b2f0c;
 color goombaC = #c7506b;
 color wallC = #595959;
 
+//trampoline
+color trampolineBlue = #3f37db;
+
+//lava
+color lavaOrange = #ffa600;
+
 
 int gridSize = 32;
 float zoom = 1.5;
@@ -65,6 +71,9 @@ PImage[] action;
 PImage[] goomba;
 FGoomba gmb;
 
+int direction;
+final int L = -1;
+  final int R = 1;
 
 
 
@@ -114,8 +123,8 @@ void setup() {
 
   reverseImage(run[0]).save("runright0.png");
   reverseImage(run[1]).save("runright1.png");
-  reverseImage(run[2]).save("runright2.png"); 
-  
+  reverseImage(run[2]).save("runright2.png");
+
   goomba = new PImage[2];
   goomba[0] = loadImage("goomba0.png");
   goomba[0].resize(gridSize, gridSize);
@@ -131,11 +140,13 @@ void setup() {
   Fisica.init(this);
   terrain = new ArrayList <FGameObject>();
   enemies = new ArrayList <FGameObject>();
-  world = new FWorld(-2000, -2000, 2000, 2000);
+  world = new FWorld(-10000, -10000, 10000, 10000);
   world.setGravity(0, 900);
   map = loadImage("texturemap.png");
   loadWorld(map);
   loadPlayer();
+  direction = R;
+  
 }
 
 void loadWorld(PImage img) {
@@ -217,15 +228,26 @@ void loadWorld(PImage img) {
         world.add(bridgePiece);
       }
       //enemies
-      else if ( c == goombaC){
+      else if ( c == goombaC) {
         FGoomba gmb = new FGoomba(x*gridSize, y*gridSize);
-        enemies.add(gmb); 
+        enemies.add(gmb);
         world.add(gmb);
-      }
-      else if( c== wallC){
+      } else if ( c== wallC) {
         b.setFillColor(wallC);
         b.setFriction(4);
         b.setName("wall");
+        world.add(b);
+      } else if (c == trampolineBlue) {
+        b.setFillColor(trampolineBlue);
+        b.setFriction(0);
+        b.setRestitution(3);
+        b.setName("trampoline");
+        world.add(b);
+      } else if (c == lavaOrange) {
+        b.setFillColor(lavaOrange);
+        b.setFriction(0);
+        
+        b.setName("lava");
         world.add(b);
       }
     }//=======================================
@@ -240,15 +262,14 @@ void loadPlayer() {
 }
 void draw() {
   background(blue);
- 
+
   drawWorld();
 
 
   actWorld();
-   fill(0);
-   textSize(50);
+  fill(0);
+  textSize(50);
   text(player.getX() + "," + player.getY(), width/2, height/2 - 100);
-
 }
 
 void actWorld() {
@@ -257,7 +278,7 @@ void actWorld() {
     FGameObject t = terrain.get(i);
     t.act();
   }
-  for(int i =0; i < enemies.size(); i++){
+  for (int i =0; i < enemies.size(); i++) {
     FGameObject e = enemies.get(i);
     e.act();
   }
