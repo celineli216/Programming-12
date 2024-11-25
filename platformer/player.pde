@@ -6,7 +6,7 @@ int frame;
   FPlayer() {
     super ();
     
-    setPosition(100, 0);
+    setPosition(1991, 1472); //RESET BACK TO 100, 0 LATER
     setName("player");
     setRotatable(false);
     setFillColor(red);

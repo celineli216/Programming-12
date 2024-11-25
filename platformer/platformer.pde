@@ -1,4 +1,4 @@
-//fix bridge regen with playerDead boolean
+//WORK ON LAVA ANIMATION
 import fisica.*;
 FWorld world;
 PImage map;
@@ -48,6 +48,11 @@ boolean playerDead;
 ArrayList<FBridge> bridges = new ArrayList<>();
 FBridge br;
 
+ArrayList<FLava> lava = new ArrayList<>();
+FLava lav;
+
+
+
 boolean bridgeReset;
 //textures==========================
 PImage grass;
@@ -67,13 +72,17 @@ PImage[] jump;
 PImage[] run;
 PImage[] action;
 
+//terrain animations===================
+PImage[] lavaPic;
+
+
 //enemies
 PImage[] goomba;
 FGoomba gmb;
 
 int direction;
 final int L = -1;
-  final int R = 1;
+final int R = 1;
 
 
 
@@ -130,23 +139,28 @@ void setup() {
   goomba[0].resize(gridSize, gridSize);
   goomba[1] = loadImage("goomba1.png");
   goomba[1].resize(gridSize, gridSize);
+  
+  lavaPic = new PImage[6];
+  lavaPic[0] = loadImage("lava0.png");
+  lavaPic[1] = loadImage("lava1.png");
+  lavaPic[2] = loadImage("lava2.png");
+  lavaPic[3] = loadImage("lava3.png");
+  lavaPic[4] = loadImage("lava4.png");
+  lavaPic[5] = loadImage("lava5.png");
 
 
-
-  //bridge = loadImage("bridge.png"); //get new bridge texture
 
   //===========================
   fullScreen();
   Fisica.init(this);
   terrain = new ArrayList <FGameObject>();
   enemies = new ArrayList <FGameObject>();
-  world = new FWorld(-10000, -10000, 10000, 10000);
+  world = new FWorld(-5000, -5000, 5000, 5000);
   world.setGravity(0, 900);
   map = loadImage("texturemap.png");
   loadWorld(map);
   loadPlayer();
   direction = R;
-  
 }
 
 void loadWorld(PImage img) {
@@ -244,10 +258,10 @@ void loadWorld(PImage img) {
         b.setName("trampoline");
         world.add(b);
       } else if (c == lavaOrange) {
-        b.setFillColor(lavaOrange);
+        FLava lav = new FLava(x*gridSize, y*gridSize);
+        terrain.add(lav);
         b.setFriction(0);
-        
-        b.setName("lava");
+
         world.add(b);
       }
     }//=======================================
@@ -257,7 +271,6 @@ void loadWorld(PImage img) {
 void loadPlayer() {
   player = new FPlayer();
   player.act();
-
   world.add(player);
 }
 void draw() {
