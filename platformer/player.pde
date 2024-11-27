@@ -1,16 +1,17 @@
 class FPlayer extends FGameObject {
 
 int frame;
-
+int lives;
 
   FPlayer() {
     super ();
     
-    setPosition(1991, 1472); //RESET BACK TO 100, 0 LATER
+    setPosition(5, 1300);
     setName("player");
     setRotatable(false);
     setFillColor(red);
     frame = 0;
+    lives = 3;
    
   }
 
@@ -24,7 +25,14 @@ int frame;
       setPosition(100, 0);
       resetBridge();
     
-    } else {
+    } 
+    
+    else if (isTouching("lava")){
+      playerDead = true;
+      setPosition(100, 0);
+      
+    }
+    else {
       playerDead = false;
     }
   }//end act==========================

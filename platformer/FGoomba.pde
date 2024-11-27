@@ -23,6 +23,16 @@ class FGoomba extends FGameObject {
       if(direction == L) attachImage(reverseImage(goomba[frame]));
       frame++;
     }
+    if(isTouching("player")){
+      if(player.getY() < getY()-gridSize/2){
+      world.remove(this);
+      enemies.remove(this);
+      player.setVelocity(player.getVelocityX(), -300);
+      } else{
+        player.lives--;
+        player.setPosition(260, 1400);
+      }
+    }
     
   }  
   void collide(){

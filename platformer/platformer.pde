@@ -1,4 +1,4 @@
-//WORK ON LAVA ANIMATION
+//fix bridge regen with playerDead boolean
 import fisica.*;
 FWorld world;
 PImage map;
@@ -30,6 +30,8 @@ color bridgeBrown = #6b2f0c;
 color goombaC = #c7506b;
 color wallC = #595959;
 
+color thwompC = #ff05ff;
+
 //trampoline
 color trampolineBlue = #3f37db;
 
@@ -43,17 +45,16 @@ float zoom = 1.5;
 FPlayer player;
 ArrayList<FGameObject> terrain;
 ArrayList<FGameObject> enemies;
+ArrayList<FGameObject> lava;
+FLava lav;
 
 boolean playerDead;
 ArrayList<FBridge> bridges = new ArrayList<>();
 FBridge br;
 
-ArrayList<FLava> lava = new ArrayList<>();
-FLava lav;
-
-
-
 boolean bridgeReset;
+//PLAYER VARIABLES===========
+
 //textures==========================
 PImage grass;
 PImage ice;
@@ -65,24 +66,26 @@ PImage treeTopW;
 PImage treeTopC;
 PImage treeTopE;
 PImage treeTopM;
-
+PImage trampoline;
 //character animations================
 PImage[] idle;
 PImage[] jump;
 PImage[] run;
 PImage[] action;
 
-//terrain animations===================
-PImage[] lavaPic;
-
-
 //enemies
 PImage[] goomba;
 FGoomba gmb;
 
+PImage[] thwompPic;
+FThwomp thwomp;
+
+//lava
+PImage[] lavaPic;
+
 int direction;
 final int L = -1;
-final int R = 1;
+  final int R = 1;
 
 
 
@@ -113,6 +116,8 @@ void setup() {
   treeTopM = loadImage("tree_intersect.png");
 
   bridge = loadImage("bridge.png");
+  
+  trampoline = loadImage("trampoline.png");
 
   //load actions===================
   idle = new PImage[2];
@@ -140,6 +145,14 @@ void setup() {
   goomba[1] = loadImage("goomba1.png");
   goomba[1].resize(gridSize, gridSize);
   
+  thwompPic = new PImage [2];
+  thwompPic[0] = loadImage("thwomp0.png"); //asleep
+  thwompPic[1] = loadImage("thwomp1.png");//angry
+  
+  thwompPic[0].resize(gridSize, gridSize);
+  thwompPic[1].resize(gridSize, gridSize);
+  
+  
   lavaPic = new PImage[6];
   lavaPic[0] = loadImage("lava0.png");
   lavaPic[1] = loadImage("lava1.png");
@@ -147,20 +160,30 @@ void setup() {
   lavaPic[3] = loadImage("lava3.png");
   lavaPic[4] = loadImage("lava4.png");
   lavaPic[5] = loadImage("lava5.png");
-
-
+  
+  lavaPic[0].resize(gridSize, gridSize);
+  lavaPic[1].resize(gridSize, gridSize);
+  lavaPic[2].resize(gridSize, gridSize);
+  lavaPic[3].resize(gridSize, gridSize);
+  lavaPic[4].resize(gridSize, gridSize);
+  lavaPic[5].resize(gridSize, gridSize);
+  //bridge = loadImage("bridge.png"); //get new bridge texture
 
   //===========================
   fullScreen();
   Fisica.init(this);
   terrain = new ArrayList <FGameObject>();
   enemies = new ArrayList <FGameObject>();
-  world = new FWorld(-5000, -5000, 5000, 5000);
+  lava = new ArrayList <FGameObject>();
+  world = new FWorld(-10000, -10000, 10000, 10000);
   world.setGravity(0, 900);
   map = loadImage("texturemap.png");
   loadWorld(map);
   loadPlayer();
   direction = R;
+  
+
+  
 }
 
 void loadWorld(PImage img) {
@@ -255,14 +278,21 @@ void loadWorld(PImage img) {
         b.setFillColor(trampolineBlue);
         b.setFriction(0);
         b.setRestitution(3);
+        b.attachImage(trampoline);
         b.setName("trampoline");
         world.add(b);
       } else if (c == lavaOrange) {
         FLava lav = new FLava(x*gridSize, y*gridSize);
-        terrain.add(lav);
-        b.setFriction(0);
-
-        world.add(b);
+        lava.add(lav);
+        world.add(lav);
+       
+        
+      }else if (c == thwompC) {
+        FThwomp thwomp = new FThwomp(x*gridSize, y*gridSize);
+        enemies.add(thwomp);
+        b.setFillColor(thwompC);
+        world.add(thwomp);
+       
       }
     }//=======================================
   }//=======================================
@@ -271,6 +301,7 @@ void loadWorld(PImage img) {
 void loadPlayer() {
   player = new FPlayer();
   player.act();
+
   world.add(player);
 }
 void draw() {
@@ -280,6 +311,7 @@ void draw() {
 
 
   actWorld();
+  
   fill(0);
   textSize(50);
   text(player.getX() + "," + player.getY(), width/2, height/2 - 100);
@@ -290,6 +322,10 @@ void actWorld() {
   for (int i =0; i< terrain.size(); i++) {
     FGameObject t = terrain.get(i);
     t.act();
+  }
+   for (int i =0; i< lava.size(); i++) {
+    FGameObject l = lava.get(i);
+    l.act();
   }
   for (int i =0; i < enemies.size(); i++) {
     FGameObject e = enemies.get(i);

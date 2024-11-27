@@ -1,17 +1,35 @@
-class FLava extends FGameObject {
-  int frame = 0;
-  //gif lavaGif;
-  FLava(float x, float y) {
+class FLava extends FGameObject{
+  int frame;
+  FLava(float x, float y){
     super();
     setPosition(x, y);
     setName("lava");
     setStatic(true);
-    //lavaGif = new gif("lava", ".png",  6, 5, x, y);
+    setRotatable(false);
+    
+    frame = int(random(lavaPic.length));
+    
   }
-
-  void act() {
-    //lavaGif.show();
+  
+  void act(){
+    animate();
   }
+  
+  void animate(){
+    
+    if(frameCount % 5 == 0){
+      frame = (frame+1) % lavaPic.length;
+      attachImage(lavaPic[frame]);
+      
+      }
+      
+    
+    
+  }//end animate
 
 
-  }
+
+
+
+
+}
