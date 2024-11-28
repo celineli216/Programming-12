@@ -4,7 +4,7 @@ class FGoomba extends FGameObject {
   int frame = 0;
 
   FGoomba(float x, float y) {
-    super();
+    super(gridSize, gridSize);
     setPosition(x, y);
     setName("goomba");
     setRotatable(false);

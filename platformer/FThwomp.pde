@@ -1,35 +1,47 @@
-class FThwomp extends FGameObject{
-  float px; //player x
-  float py; // player y
+class FThwomp extends FGameObject {
+
   float tx;
   float ty;
   FBox detect;
-  FThwomp(float x, float y){
-    super();
-    setPosition(x, y);
-    //px = player.getX();
-    //py = player.getY();
+  boolean isAwake;
+
+  FThwomp(float x, float y) {
+    super(gridSize*2, gridSize*2);
+    setPosition(x, y+15);
+
+
     tx = x;
     ty = y;
-    FBox detect = new FBox(gridSize, 4*gridSize);
-    detect.setPosition(x, y); //left off here, add detection for thwomp
-  
+    setStatic(true);
+    setName("thwomp");
+    FBox detect = new FBox(gridSize, 6*gridSize);
+    detect.setPosition(x, y + 3*gridSize); //left off here, add detection for thwomp
+    world.add(detect);
+    setStatic(true);
+    detect.setStatic(true);
+    detect.setSensor(true);
+    detect.setNoFill();
+    detect.setNoStroke();
   }
-  
-  void act(){
+
+  void act() {
     attachImage(thwompPic[0]);
-
+    awake();
   }
-  
-  void drawRect(){
-   
-    
-  }
-  
-  void awake(){
-  
-  }
+  // return mouseX > x-w/2 && mouseX < x+w/2 && mouseY > y-h/2 && mouseY < y+h/2;
+  void awake() {
+    //if(player.getX() > tx - gridSize/2 && player.getX() < tx + gridSize/2 && player.getY() > ty - gridSize/2 && player.getY() < ty + gridSize/2){
+    //  isAwake = true;
+    //  attachImage(thwompPic[1]);
 
+    //}
+    if (player.getX() > tx - gridSize && player.getX() < tx + gridSize && player.getY() > ty) {
+      isAwake = true;
+    }
+    if (isAwake) {
+      attachImage(thwompPic[1]);
+      setStatic(false);
+    }
 
-
+  }//end awake
 }

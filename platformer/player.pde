@@ -1,18 +1,17 @@
 class FPlayer extends FGameObject {
 
-int frame;
-int lives;
+  int frame;
+  int lives;
 
   FPlayer() {
-    super ();
-    
-    setPosition(5, 1300);
+    super (gridSize, gridSize);
+
+    setPosition(2390, 1300);
     setName("player");
     setRotatable(false);
     setFillColor(red);
     frame = 0;
     lives = 3;
-   
   }
 
   void act() {
@@ -24,25 +23,23 @@ int lives;
       playerDead = true;
       setPosition(100, 0);
       resetBridge();
-    
-    } 
-    
-    else if (isTouching("lava")){
+    } else if (isTouching("lava")) {
       playerDead = true;
       setPosition(100, 0);
-      
-    }
-    else {
+    } else if (isTouching("thwomp")) {
+      playerDead = true;
+      setPosition(100, 0);
+    } else {
       playerDead = false;
     }
   }//end act==========================
 
 
-  void animate(){
-    if(frame >= action.length) frame = 0;
-    if(frameCount % 5 == 0){
-      if(direction == R )attachImage(action[frame]);
-      if(direction == L) attachImage(reverseImage(action[frame]));
+  void animate() {
+    if (frame >= action.length) frame = 0;
+    if (frameCount % 5 == 0) {
+      if (direction == R )attachImage(action[frame]);
+      if (direction == L) attachImage(reverseImage(action[frame]));
       frame++;
     }
   }
@@ -50,23 +47,23 @@ int lives;
   void handleInput() {
     float vy = getVelocityY();
     float vx = getVelocityX();
-    if (abs(vy) < 0.1){
+    if (abs(vy) < 0.1) {
       action = idle;
     }
     if (akey) {
-      setVelocity(-200, vy);
+      setVelocity(-220, vy);
       action = run;
       direction = L;
     }
     if (dkey) {
-      setVelocity (200, vy);
+      setVelocity (220, vy);
       action = run;
       direction = R;
     }
     if (wkey) {
       setVelocity(vx, -200);
     }
-    if( abs(vy) > 0.1){
+    if ( abs(vy) > 0.1) {
       action = jump;
     }
   }//end handle input=======

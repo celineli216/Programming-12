@@ -1,7 +1,7 @@
 class FLava extends FGameObject{
   int frame;
   FLava(float x, float y){
-    super();
+    super(gridSize, gridSize);
     setPosition(x, y);
     setName("lava");
     setStatic(true);

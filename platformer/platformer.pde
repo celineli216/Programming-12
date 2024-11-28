@@ -32,6 +32,9 @@ color wallC = #595959;
 
 color thwompC = #ff05ff;
 
+color hammerBroC = #ff0505;
+color hammerWallC = #eb7575;
+
 //trampoline
 color trampolineBlue = #3f37db;
 
@@ -80,12 +83,17 @@ FGoomba gmb;
 PImage[] thwompPic;
 FThwomp thwomp;
 
+PImage[] hammerBroPic;
+PImage hammerPic;
+FHammerBro hammerBro;
+
+
 //lava
 PImage[] lavaPic;
 
 int direction;
 final int L = -1;
-  final int R = 1;
+final int R = 1;
 
 
 
@@ -116,7 +124,7 @@ void setup() {
   treeTopM = loadImage("tree_intersect.png");
 
   bridge = loadImage("bridge.png");
-  
+
   trampoline = loadImage("trampoline.png");
 
   //load actions===================
@@ -144,15 +152,21 @@ void setup() {
   goomba[0].resize(gridSize, gridSize);
   goomba[1] = loadImage("goomba1.png");
   goomba[1].resize(gridSize, gridSize);
-  
+
   thwompPic = new PImage [2];
   thwompPic[0] = loadImage("thwomp0.png"); //asleep
   thwompPic[1] = loadImage("thwomp1.png");//angry
-  
-  thwompPic[0].resize(gridSize, gridSize);
-  thwompPic[1].resize(gridSize, gridSize);
-  
-  
+
+  thwompPic[0].resize(gridSize*2, gridSize*2);
+  thwompPic[1].resize(gridSize*2, gridSize*2);
+
+  hammerBroPic = new PImage[2];
+  hammerBroPic[0] = loadImage("hammerbro0.png");
+  hammerBroPic[1] = loadImage("hammerbro1.png");
+
+  hammerPic = new PImage();
+  hammerPic = loadImage("hammer.png");
+
   lavaPic = new PImage[6];
   lavaPic[0] = loadImage("lava0.png");
   lavaPic[1] = loadImage("lava1.png");
@@ -160,7 +174,7 @@ void setup() {
   lavaPic[3] = loadImage("lava3.png");
   lavaPic[4] = loadImage("lava4.png");
   lavaPic[5] = loadImage("lava5.png");
-  
+
   lavaPic[0].resize(gridSize, gridSize);
   lavaPic[1].resize(gridSize, gridSize);
   lavaPic[2].resize(gridSize, gridSize);
@@ -181,9 +195,6 @@ void setup() {
   loadWorld(map);
   loadPlayer();
   direction = R;
-  
-
-  
 }
 
 void loadWorld(PImage img) {
@@ -285,14 +296,22 @@ void loadWorld(PImage img) {
         FLava lav = new FLava(x*gridSize, y*gridSize);
         lava.add(lav);
         world.add(lav);
-       
-        
-      }else if (c == thwompC) {
+      } else if (c == thwompC) {
         FThwomp thwomp = new FThwomp(x*gridSize, y*gridSize);
         enemies.add(thwomp);
         b.setFillColor(thwompC);
         world.add(thwomp);
-       
+      } else if (c == hammerBroC) {
+        FHammerBro hammerBro = new FHammerBro(x*gridSize, y*gridSize);
+        enemies.add(hammerBro);
+        b.setFillColor(hammerBroC);
+        world.add(hammerBro);
+      } else if (c == hammerWallC) {
+        b.setFillColor(hammerWallC);
+        b.setName("hammerWall");
+        b.setFriction(4);
+        
+        world.add(b);
       }
     }//=======================================
   }//=======================================
@@ -311,7 +330,7 @@ void draw() {
 
 
   actWorld();
-  
+
   fill(0);
   textSize(50);
   text(player.getX() + "," + player.getY(), width/2, height/2 - 100);
@@ -323,7 +342,7 @@ void actWorld() {
     FGameObject t = terrain.get(i);
     t.act();
   }
-   for (int i =0; i< lava.size(); i++) {
+  for (int i =0; i< lava.size(); i++) {
     FGameObject l = lava.get(i);
     l.act();
   }
