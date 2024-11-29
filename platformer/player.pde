@@ -5,7 +5,6 @@ class FPlayer extends FGameObject {
 
   FPlayer() {
     super (gridSize, gridSize);
-
     setPosition(2390, 1300);
     setName("player");
     setRotatable(false);
@@ -15,9 +14,9 @@ class FPlayer extends FGameObject {
   }
 
   void act() {
-
-    handleInput();
     animate();
+    handleInput();
+    
 
     if (isTouching("spike")) {
       playerDead = true;
@@ -27,6 +26,9 @@ class FPlayer extends FGameObject {
       playerDead = true;
       setPosition(100, 0);
     } else if (isTouching("thwomp")) {
+      playerDead = true;
+      setPosition(100, 0);
+    } else if (isTouching("hammer")) {
       playerDead = true;
       setPosition(100, 0);
     } else {
@@ -51,14 +53,16 @@ class FPlayer extends FGameObject {
       action = idle;
     }
     if (akey) {
+      direction = L;
       setVelocity(-220, vy);
       action = run;
-      direction = L;
+      
     }
     if (dkey) {
+      direction = R;
       setVelocity (220, vy);
       action = run;
-      direction = R;
+      
     }
     if (wkey) {
       setVelocity(vx, -200);

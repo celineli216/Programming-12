@@ -49,6 +49,7 @@ FPlayer player;
 ArrayList<FGameObject> terrain;
 ArrayList<FGameObject> enemies;
 ArrayList<FGameObject> lava;
+ArrayList<FGameObject> hammerList;
 FLava lav;
 
 boolean playerDead;
@@ -86,12 +87,14 @@ FThwomp thwomp;
 PImage[] hammerBroPic;
 PImage hammerPic;
 FHammerBro hammerBro;
+FHammer hammer;
 
 
 //lava
 PImage[] lavaPic;
 
 int direction;
+
 final int L = -1;
 final int R = 1;
 
@@ -101,6 +104,7 @@ void setup() {
   //game booleans
   //playerDead = false;
   //playerDeadNum = 0;
+  direction = R;
   bridgeReset = false;
 
   //texttures========
@@ -189,12 +193,13 @@ void setup() {
   terrain = new ArrayList <FGameObject>();
   enemies = new ArrayList <FGameObject>();
   lava = new ArrayList <FGameObject>();
+  hammerList = new ArrayList <FGameObject>();
   world = new FWorld(-10000, -10000, 10000, 10000);
   world.setGravity(0, 900);
   map = loadImage("texturemap.png");
   loadWorld(map);
   loadPlayer();
-  direction = R;
+  
 }
 
 void loadWorld(PImage img) {
@@ -302,15 +307,16 @@ void loadWorld(PImage img) {
         b.setFillColor(thwompC);
         world.add(thwomp);
       } else if (c == hammerBroC) {
-        FHammerBro hammerBro = new FHammerBro(x*gridSize, y*gridSize);
-        enemies.add(hammerBro);
+        hammerBro = new FHammerBro(x * gridSize, y * gridSize); // Assign to global variable
+        enemies.add(hammerBro); // Add it to the enemies list
         b.setFillColor(hammerBroC);
         world.add(hammerBro);
       } else if (c == hammerWallC) {
         b.setFillColor(hammerWallC);
         b.setName("hammerWall");
+        b.attachImage(grass);
         b.setFriction(4);
-        
+
         world.add(b);
       }
     }//=======================================
@@ -349,6 +355,10 @@ void actWorld() {
   for (int i =0; i < enemies.size(); i++) {
     FGameObject e = enemies.get(i);
     e.act();
+  }
+  for (int i =0; i < hammerList.size(); i++) {
+    FGameObject h = hammerList.get(i);
+    h.act();
   }
 }
 

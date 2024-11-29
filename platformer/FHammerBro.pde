@@ -12,6 +12,7 @@ class FHammerBro extends FGameObject {
     setPosition(x, y);
     setName("hammerBro");
     setRotatable(false);
+    
   }
 
   void act() {
@@ -39,15 +40,20 @@ class FHammerBro extends FGameObject {
   void collide() {
     if (isTouching("hammerWall")) {
       direction *= -1;
-      if(direction < 0){
-      setPosition(getX()+direction-5, getY());
-      } else{
+      if (direction < 0) {
+        setPosition(getX()+direction-5, getY());
+      } else {
         setPosition(getX()+direction+5, getY());
       }
     }
   }//end collide
-  
-  void throwHammer(){ // left off here, add hammers arraylist & make hammer/projectile class (?)
-  
-  }
+
+  void throwHammer() { // left off here, add hammers arraylist & make hammer/projectile class (?)
+
+    if (frameCount % 20 == 0) {
+      FHammer hammer = new FHammer();
+      hammerList.add(hammer);
+      world.add(hammer);
+    }
+  }//end throwHammer
 }
