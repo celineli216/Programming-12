@@ -370,8 +370,6 @@ void resetBridge() {
 
 
 
-
-
 void drawWorld() {
   pushMatrix();
   translate(-player.getX()*zoom + width/2, -player.getY()*zoom + height/2);

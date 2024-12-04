@@ -12,7 +12,6 @@ class FHammerBro extends FGameObject {
     setPosition(x, y);
     setName("hammerBro");
     setRotatable(false);
-    
   }
 
   void act() {
@@ -46,11 +45,23 @@ class FHammerBro extends FGameObject {
         setPosition(getX()+direction+5, getY());
       }
     }
+
+    //kill player/hammerbro
+    if (isTouching("player")) {
+      if (player.getY() < getY()-gridSize/2) {
+        world.remove(this);
+        enemies.remove(this);
+        player.setVelocity(player.getVelocityX(), -300);
+      } else {
+        player.lives--;
+        player.setPosition(260, 1400);
+      }
+    }
   }//end collide
 
   void throwHammer() { // left off here, add hammers arraylist & make hammer/projectile class (?)
 
-    if (frameCount % 20 == 0) {
+    if (frameCount % 200 == 0) {
       FHammer hammer = new FHammer();
       hammerList.add(hammer);
       world.add(hammer);
