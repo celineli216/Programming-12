@@ -1,7 +1,7 @@
 class FBridge extends FGameObject {
   float bridgeOriginalX, bridgeOriginalY;
   FBridge(float x, float y) {
-    super();
+    super(gridSize, gridSize);
     setPosition(x, y);
     bridgeOriginalX = x;
     bridgeOriginalY = y;
