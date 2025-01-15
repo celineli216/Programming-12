@@ -1,40 +1,42 @@
-// FIX SLIME.ISATTACK NULL POINTER EXCEPTION
-//CODE HEALTH BAR
+//fix jump to idle animation delay
 class FPlayer extends FGameObject {
 
   int frame;
+  int bladeFrame;
   int lives;
   float health;
   FBox attackBox;
-  
+
   boolean attackRight;
   boolean attackLeft;
 
+  int direction = R;
+
 
   FPlayer() {
-    super (gridSize, gridSize);
+    super (gridSize, gridSize*2);
     setPosition(35, 1450);
     setName("player");
     setRotatable(false);
     setFillColor(red);
     frame = 0;
+    bladeFrame = 0;
     lives = 3;
     health = 100;
-    
+
     attackRight = false;
     attackLeft = false;
   }
 
   void attack() {
-    FBox attackBox = new FBox(2*gridSize, 2*gridSize);
-    if(direction == R){
-    attackBox.setPosition(getX() + gridSize/2, getY());
-    }
-    else{
+    FBox attackBox = new FBox(gridSize, gridSize);
+    if (direction == R) {
+      attackBox.setPosition(getX() + gridSize/2, getY());
+    } else {
       attackBox.setPosition(getX() - gridSize/2, getY());
     }
-    
-    
+
+
     attackBox.setName("knightAttackBox");
     attackBox.setStrokeWeight(1);
     //attackBox.setStroke(0);
@@ -42,19 +44,18 @@ class FPlayer extends FGameObject {
     attackBox.setNoFill();
     world.add(attackBox);
     attackBox.setStatic(false);
-    attackBox.setForce(0, 200);
-    attackBox.setSensor(true);
 
-    
+    attackBox.setSensor(true);
   }
 
 
   void act() {
     handleInput();
-    animate();
+    //animateKnight();
+    animateBlade();
     handleHealth();
     healthBar();
-    
+
 
 
 
@@ -65,6 +66,7 @@ class FPlayer extends FGameObject {
     } else if (isTouching("lava")) {
       playerDead = true;
       setPosition(100, 0);
+      resetBridge();
     } else if (isTouching("thwomp")) {
       playerDead = true;
       setPosition(100, 0);
@@ -77,12 +79,35 @@ class FPlayer extends FGameObject {
   }//end act==========================
 
 
-  void animate() {
-    if (frame >= knight_action.length) frame = 0;
+  //void animateKnight() {
+  //  if (frame >= knight_action.length) frame = 0;
+  //  if (frameCount % 2 == 0) {
+  //    knight_action[frame].resize(gridSize*5, gridSize*5);
+  //    if (direction == R )attachImage(knight_action[frame]);
+  //    if (direction == L ) attachImage(reverseImage(knight_action[frame]));
+  //    frame++;
+  //  }
+  //}
+
+  //  void animateBlade() {
+  //  if (bladeFrame >= blade_action.length) bladeFrame = 0;
+  //  if (frameCount % 2 == 0) {
+  //    blade_action[bladeFrame].resize(gridSize, gridSize);
+  //    if (direction == R )attachImage(blade_action[bladeFrame]);
+  //    if (direction == L ) attachImage(reverseImage(blade_action[bladeFrame]));
+  //    bladeFrame++;
+  //  }
+  //}
+
+  void animateBlade() {
+
+    if (frame >= blade_action.length) frame = 0;
     if (frameCount % 2 == 0) {
-      knight_action[frame].resize(gridSize*5, gridSize*5);
-      if (direction == R )attachImage(knight_action[frame]);
-      if (direction == L ) attachImage(reverseImage(knight_action[frame]));
+
+      blade_action[frame].resize(gridSize*2, gridSize*2);
+
+      if (direction == R )attachImage(blade_action[frame]);
+      if (direction == L ) attachImage(reverseImage(blade_action[frame]));
       frame++;
     }
   }
@@ -92,32 +117,49 @@ class FPlayer extends FGameObject {
     float vx = getVelocityX();
     if (abs(vy) < 0.1) {
       knight_action = knight_idle;
+      blade_action = blade_idle;
     }
     if (akey) {
       knight_action = knight_run;
+      blade_action = blade_run;
       direction = L;
-     
+
       setVelocity(-220, vy);
     }
-  
+
     if (dkey) {
       knight_action = knight_run;
+      blade_action = blade_run;
       direction = R;
       attackRight = true;
       setVelocity (220, vy);
     }
-     
+
     if (wkey) {
       setVelocity(vx, -200);
     }
     if (spacekey) {
       knight_action = knight_attack;
+      blade_action = blade_attack;
       attack();
+    }
+
+    if (nkey) {
+      knight_action = knight_attack;
+      blade_action = blade_throw;
+      throwKnife();
     }
     if ( abs(vy) > 0.1) {
       knight_action = knight_jump;
+      blade_action = blade_jump;
     }
   }//end handle input=======
+
+  void throwKnife() {
+    FKnife knife = new FKnife();
+    knifeList.add(knife);
+    world.add(knife);
+  }
 
   void healthBar() {
     float barLength;
@@ -148,6 +190,7 @@ class FPlayer extends FGameObject {
       health = 100;
     }
 
+    //slime--------
     for (FGameObject enemy : enemies) {
       if (enemy instanceof FSlime) {
         FSlime slimeEnemy = (FSlime) enemy;
@@ -156,5 +199,30 @@ class FPlayer extends FGameObject {
         }
       }
     }
+    //end slime------------
+    //wizard---------
+    for (FGameObject enemy : enemies) {
+      if (enemy instanceof FWizard) {
+        FWizard wizardEnemy = (FWizard) enemy;
+        if (wizardEnemy.isAttack) {
+          health -= 0.2;
+        }
+      }
+    }
+    //endwizard-------------
+
+    //worm---------
+    
+    for (FGameObject enemy : enemies) {
+      if (enemy instanceof FWorm) {
+        FWorm wormEnemy = (FWorm) enemy;
+        if (wormEnemy.isAttack) {
+          health -= 0.5;
+        }
+      }
+    }
+    
+    
+    //end worm-------------
   }//end handle health=========
 }
