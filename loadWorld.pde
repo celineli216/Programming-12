@@ -2,15 +2,16 @@
 //stair falls when player steps on it like bridge
 //make stairs as fancy terrain
 
+FTrampoline t1;
 void loadWorld(PImage img) {
   for (int y = 0; y < img.height; y++) {
 
     for (int x = 0; x < img.width; x++) {
       color c = img.get(x, y); // colour of current piel
-      //color s = img.get(x, y+1); //colour below current pixel
-      //color w = img.get(x-1, y); //colour west of current pixel
-      //color e = img.get(x+1, y); //colour east of current pixel
-      ////color n = img.get(x, y-1); //colour above current pixel
+      color s = img.get(x, y+1); //colour below current pixel
+      color w = img.get(x-1, y); //colour west of current pixel
+      color e = img.get(x+1, y); //colour east of current pixel
+      //color n = img.get(x, y-1); //colour above current pixel
       FBox b = new FBox(gridSize, gridSize);
       b.setPosition(x*gridSize, y*gridSize);
       b.setStatic(true);
@@ -24,74 +25,75 @@ void loadWorld(PImage img) {
         b.setName("grass");
         world.add(b);
       }
-      //else if (c == dirtBrown) {
-      //  b.setFillColor(dirtBrown);
-      //  b.attachImage(dirt);
-      //  b.setName("dirt");
-      //  world.add(b);
-      //} else if (c == trunkBrown) {
-      //  b.setFillColor(trunkBrown);
-      //  b.setName("tree trunk");
-      //  b.attachImage(treeTrunk);
-      //  b.setSensor(true); // puts it in the background
-      //  world.add(b);
-      //} else if (c == leafGreen1 ) { //middle
-      //  b.setFillColor(leafGreen1);
-      //  b.setName("leaf1");
-      //  b.attachImage(treeTopC);
-      //  b.setFriction(4);
-      //  world.add(b);
-      //} else if (c == leafGreen2 && w != leafGreen2  && e == leafGreen1) { //end
-      //  b.setFillColor(leafGreen2);
-      //  b.setName("leaf2");
-      //  b.attachImage(treeTopW);
-      //  b.setFriction(4);
-      //  world.add(b);
-      //} else if (c == leafGreen2 && w == leafGreen1 && e != leafGreen2) { //end
-      //  b.setFillColor(leafGreen2);
-      //  b.setName("leaf2");
-      //  b.attachImage(treeTopE);
-      //  b.setFriction(4);
-      //  world.add(b);
-      //} else if (c == leafGreen3 && s == trunkBrown) { //middle piece
-      //  b.setFillColor(leafGreen3);
-      //  b.setFriction(4);
-      //  b.attachImage(treeTopM);
-      //  b.setName("leaf3");
-      //  world.add(b);
-      //} else if (c == iceBlue) {
-      //  b.setFillColor(iceBlue);
-      //  b.setFriction(0);
-      //  b.attachImage(ice);
-      //  b.setName("ice");
-      //  world.add(b);
-      //  //traps
-      //} else if (c == spikeGrey) {
-      //  b.setFillColor(spikeGrey);
-      //  b.setFriction(4);
-      //  b.attachImage(spike);
-      //  b.setName("spike");
-      //  world.add(b);
-      //  //fancy terrain
-      //} else if (c == bridgeBrown ) {
-      //  FBridge bridgePiece = new FBridge(x * gridSize, y * gridSize);
-      //  bridgePiece.setRotatable(false);
-      //  bridges.add(bridgePiece);
-      //  bridgePiece.attachImage(bridge);
-      //  terrain.add(bridgePiece);
-      //  world.add(bridgePiece);
-      //}
-      ////enemies
-      //else if ( c == goombaC) {
-      //  FGoomba gmb = new FGoomba(x*gridSize, y*gridSize);
-      //  enemies.add(gmb);
-      //  world.add(gmb);
-      //} else if ( c== wallC) {
-      //  b.setFillColor(wallC);
-      //  b.setFriction(4);
-      //  b.setName("wall");
-      //  world.add(b);
-      //} 
+      else if (c == dirtBrown) {
+        b.setFillColor(dirtBrown);
+        b.attachImage(dirt);
+        b.setName("dirt");
+        world.add(b);
+      } else if (c == trunkBrown) {
+        b.setFillColor(trunkBrown);
+        b.setName("tree trunk");
+        b.attachImage(treeTrunk);
+        b.setSensor(true); // puts it in the background
+        world.add(b);
+      } else if (c == leafGreen1 ) { //middle
+        b.setFillColor(leafGreen1);
+        b.setName("leaf1");
+        b.attachImage(treeTopC);
+        b.setFriction(4);
+        world.add(b);
+      } else if (c == leafGreen2 && w != leafGreen2  && e == leafGreen1) { //end
+        b.setFillColor(leafGreen2);
+        b.setName("leaf2");
+        b.attachImage(treeTopW);
+        b.setFriction(4);
+        world.add(b);
+      } else if (c == leafGreen2 && w == leafGreen1 && e != leafGreen2) { //end
+        b.setFillColor(leafGreen2);
+        b.setName("leaf2");
+        b.attachImage(treeTopE);
+        b.setFriction(4);
+        world.add(b);
+      } else if (c == leafGreen3 && s == trunkBrown) { //middle piece
+        b.setFillColor(leafGreen3);
+        b.setFriction(4);
+        b.attachImage(treeTopM);
+        b.setName("leaf3");
+        world.add(b);
+      } else if (c == iceBlue) {
+        b.setFillColor(iceBlue);
+        b.setFriction(0);
+        b.attachImage(ice);
+        b.setName("ice");
+        world.add(b);
+        //traps
+      } else if (c == spikeGrey) {
+        b.setFillColor(spikeGrey);
+        b.setFriction(4);
+        b.attachImage(spike);
+        b.setName("spike");
+        world.add(b);
+        //fancy terrain
+      } 
+      else if (c == bridgeBrown ) {
+        FBridge bridgePiece = new FBridge(x * gridSize, y * gridSize);
+        bridgePiece.setRotatable(false);
+        bridges.add(bridgePiece);
+        bridgePiece.attachImage(bridge);
+        terrain.add(bridgePiece);
+        world.add(bridgePiece);
+      }
+      //enemies
+      else if ( c == goombaC) {
+        FGoomba gmb = new FGoomba(x*gridSize, y*gridSize);
+        enemies.add(gmb);
+        world.add(gmb);
+      } else if ( c== wallC) {
+        b.setFillColor(wallC);
+        b.setFriction(4);
+        b.setName("wall");
+        world.add(b);
+      } 
       else if (c == trampolineBlue) {
         b.setFillColor(trampolineBlue);
         b.setFriction(0);
@@ -104,24 +106,24 @@ void loadWorld(PImage img) {
         lava.add(lav);
         world.add(lav);
       }
-      //else if (c == thwompC) {
-      //  FThwomp thwomp = new FThwomp(x*gridSize, y*gridSize);
-      //  enemies.add(thwomp);
-      //  b.setFillColor(thwompC);
-      //  world.add(thwomp);
-      //} else if (c == hammerBroC) {
-      //  hammerBro = new FHammerBro(x * gridSize, y * gridSize); // Assign to global variable
-      //  enemies.add(hammerBro); // Add it to the enemies list
-      //  b.setFillColor(hammerBroC);
-      //  world.add(hammerBro);
-      //} else if (c == hammerWallC) {
-      //  b.setFillColor(hammerWallC);
-      //  b.setName("hammerWall");
-      //  b.attachImage(grass);
-      //  b.setFriction(4);
+      else if (c == thwompC) {
+        FThwomp thwomp = new FThwomp(x*gridSize, y*gridSize);
+        enemies.add(thwomp);
+        b.setFillColor(thwompC);
+        world.add(thwomp);
+      } else if (c == hammerBroC) {
+        hammerBro = new FHammerBro(x * gridSize, y * gridSize); // Assign to global variable
+        enemies.add(hammerBro); // Add it to the enemies list
+        b.setFillColor(hammerBroC);
+        world.add(hammerBro);
+      } else if (c == hammerWallC) {
+        b.setFillColor(hammerWallC);
+        b.setName("hammerWall");
+        b.attachImage(grass);
+        b.setFriction(4);
 
-      //  world.add(b);
-      //} 
+        world.add(b);
+      } 
       else if (c == cobblestoneBlue) {
         b.setFillColor(cobblestoneBlue);
         b.setName("cobblestone");
@@ -162,7 +164,12 @@ void loadWorld(PImage img) {
         b.setFriction(4);
         b.attachImage(brownGem);
         world.add(b);
-      } else if (c == slimeC) {
+      }    else if (c == wormC) { 
+     FWorm worm = new FWorm(x*gridSize, y*gridSize);
+      enemies.add(worm);
+      world.add(worm);
+      
+      }else if (c == slimeC) {
         FSlime slime = new FSlime(x*gridSize, y* gridSize);
         slime.setFillColor(slimeC);
         slime.setName("slime");
@@ -172,14 +179,27 @@ void loadWorld(PImage img) {
         b.setFillColor(redDirtC);
         b.setName("reddirt");
         b.attachImage(redDirt);
+        b.setFriction(4);
         world.add(b);
-      }else if (c == skeletonC) { //skeleton block not loaded?? check colour
-      FSkeleton skeleton = new FSkeleton(x*gridSize, y*gridSize);
-      enemies.add(skeleton);
-      world.add(skeleton);
-
-
+      }else if (c == wizardC) { 
+      FWizard wizard = new FWizard(x*gridSize, y*gridSize);
+      enemies.add(wizard);
+      world.add(wizard);
       }
+      else if(c == specialTrampoline){
+        FTrampoline t1 = new FTrampoline(x*gridSize, y*gridSize);
+        terrain.add(t1);
+        world.add(t1);
+      
+      }else if (c == checkpointC) {
+        b.setFillColor(checkpointC);
+        b.setName("checkpoint");
+        b.setFriction(4);
+        b.attachImage(brownGem);
+        world.add(b);
+      } 
+      
+   
     }//=======================================
   }//=======================================
 }//=======================================

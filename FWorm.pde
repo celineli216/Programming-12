@@ -4,6 +4,7 @@ class FWorm extends FGameObject {
   float health;
 
   boolean willAttack;
+  boolean willThrow;
   boolean isAttack;
   boolean r;
   boolean l;
@@ -14,18 +15,19 @@ class FWorm extends FGameObject {
 
   int frame = 0;
   int direction;
-  
+
 
 
 
   FWorm(float x, float y) {
     super(gridSize*2, gridSize*2);
-    
+
 
     setPosition(x, y);
     setName("fireworm");
     setRotatable(false);
     willAttack = false;
+    willThrow = false;
     isAttack = false;
     isDead = false;
     speed = 100;
@@ -43,7 +45,7 @@ class FWorm extends FGameObject {
     detectPlayer();
     attack();
     move();
-    
+
     attacked();
   }
 
@@ -54,15 +56,15 @@ class FWorm extends FGameObject {
   void attack() {
     if (isTouching("player")) {
       isAttack = true;
-      
+
       animateAttack();
-      
+
       //skeletonAction = skeletonAttack;
-    } else if (willAttack == true){
+    } else if (willThrow == true) {
       animateAttack();
       throwFireball();
     }
-    
+
     if (isTouching("player") == false) {
       isAttack = false;
     }
@@ -126,6 +128,13 @@ class FWorm extends FGameObject {
     } else {
       willAttack = false;
     }
+
+
+    if (player.getX() > getX() - gridSize*12 && player.getX() < getX() + gridSize*12 && player.getY() > getY() - gridSize*6 && player.getY() < getY() +gridSize*12) {
+      willThrow = true;
+    } else {
+      willThrow = false;
+    }
   }//end detectplayer========
 
   void move() {
@@ -134,13 +143,11 @@ class FWorm extends FGameObject {
     if (r == true && willAttack == true) {
       setVelocity(speed, vy);
       animateWalk();
-     
     }
 
     if (l == true && willAttack == true) {
       animateWalk();
       setVelocity(-speed, vy);
-      
     }
   }
 
@@ -157,12 +164,12 @@ class FWorm extends FGameObject {
       enemies.remove(this);
     }
   }
-//alter so that it shoots a fireball one at a time
+  //alter so that it shoots a fireball one at a time
   void throwFireball() {
-if (frameCount % 100 == 0) {
-    FFireball fireball = new FFireball(this);
-    fireballList.add(fireball);
-    world.add(fireball);
-  }
+    if (frameCount % 50 == 0) {
+      FFireball fireball = new FFireball(this);
+      fireballList.add(fireball);
+      world.add(fireball);
+    }
   }
 }

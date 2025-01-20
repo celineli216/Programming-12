@@ -27,6 +27,16 @@ PImage[] knight_run;
 PImage[] knight_action;
 PImage[] knight_attack;
 
+PImage[] blade_idle;
+PImage[] blade_jump;
+PImage[] blade_run;
+PImage[] blade_action;
+PImage[] blade_throw;
+PImage[] blade_attack;
+FKnife knife;
+
+PImage knifePic;
+
 //enemies
 PImage[] goomba;
 FGoomba gmb;
@@ -44,11 +54,18 @@ FSlime slime;
 PImage[] slimeMove;
 PImage[] slimeAttack;
 
-PImage[] skeletonIdle;
-PImage[] skeletonWalk;
-PImage[] skeletonAttack;
-PImage[] skeletonAction;
-FSkeleton skeleton;
+PImage[] wizardIdle;
+PImage[] wizardRun;
+PImage[] wizardAttack;
+FWizard wizard;
+
+PImage[] wormIdle;
+PImage[] wormAttack;
+PImage[] wormWalk;
+
+FWorm worm;
+FFireball fireball;
+PImage fireballPic;
 
 
 //lava
@@ -58,7 +75,7 @@ PImage[] lavaPic;
 
 void vloadImage() {
   background = loadImage("underworld_bg1.png");
-  
+
   grass = loadImage("grass.png");
   grass.resize(32, 32);
 
@@ -94,10 +111,10 @@ void vloadImage() {
 
   underDirt = loadImage("underworld_dirt2.png");
   underDirt.resize(gridSize, gridSize);
-  
+
   redDirt = loadImage("red_dirt.png");
   redDirt.resize(gridSize, gridSize);
-  
+
   brownGem = loadImage("brown_gem.png");
   brownGem.resize(gridSize, gridSize);
 
@@ -124,7 +141,9 @@ void vloadImage() {
   //reverseImage(run[2]).save("runright2.png");
 
 
-//PLAYER ANIMATIONS=======================================
+  //PLAYER ANIMATIONS=======================================
+
+
 
   knight_idle = new PImage[11];
   for (int i =0; i < knight_idle.length; i++) {
@@ -141,66 +160,125 @@ void vloadImage() {
     knight_run[i] = loadImage("knight_run" + i + ".png");
   }
 
-  //for (int i =0; i < knight_run.length; i++) {
-  //  reverseImage(knight_run[i]).save("knight_run" + i + ".png");
-  //}
+
 
   knight_attack = new PImage[7];
 
   for (int i =0; i < knight_attack.length; i++) {
     knight_attack[i] = reverseImage(loadImage("knight_attack" + i + ".png"));
   }
-  
-  //  for (int i =0; i < knight_run.length; i++) {
-  //  reverseImage(knight_attack[i]).save("knight_attack" + i + ".png");
-  //}
+
 
   knight_action = knight_idle;
 
+  //end knight===========
+
+  blade_idle = new PImage[8];
+  for (int i =0; i < blade_idle.length; i++) {
+
+    blade_idle[i] = loadImage("blade_idle" + i + ".png");
+  }
+
+  blade_jump = new PImage[3];
+  for (int i =0; i < blade_jump.length; i++) {
+
+    blade_jump[i] = loadImage("blade_jump"+ i + ".png");
+  }
+
+  blade_run = new PImage[8];
+  for (int i =0; i < blade_run.length; i++) {
+
+    blade_run[i] = loadImage("blade_run" + i + ".png");
+  }
+
+
+  blade_attack = new PImage[8];
+
+  for (int i =0; i < blade_attack.length; i++) {
+
+    blade_attack[i] = loadImage("blade_attack" + i + ".png");
+  }
+
+  blade_throw = new PImage[7];
+
+  for (int i =0; i < blade_throw.length; i++) {
+
+    blade_throw[i] = loadImage("blade_throw" + i + ".png");
+  }
+
+  knifePic = new PImage();
+  knifePic = loadImage("knife.png");
+
+
+  blade_action = blade_idle;
+
 
   //end player animations
-  
+
   slimeIdle = new PImage[4];
-  for (int i = 0; i < slimeIdle.length; i++){
+  for (int i = 0; i < slimeIdle.length; i++) {
     slimeIdle[i] = loadImage("slime-idle-" + i + ".png");
     slimeIdle[i].resize(gridSize, gridSize);
   }
-  
+
   slimeMove = new PImage[3];
-    for (int i = 0; i < slimeMove.length; i++){
+  for (int i = 0; i < slimeMove.length; i++) {
     slimeMove[i] = loadImage("slime-move-" + i + ".png");
     slimeMove[i].resize(gridSize, gridSize);
   }
-  
-    slimeAttack = new PImage[5];
-    for (int i = 0; i < slimeAttack.length; i++){
+
+  slimeAttack = new PImage[5];
+  for (int i = 0; i < slimeAttack.length; i++) {
     slimeAttack[i] = loadImage("slime-attack-" + i + ".png");
     slimeAttack[i].resize(gridSize, gridSize);
   }
-  
+
   //SKELETON IMAGES===========================
-    skeletonIdle = new PImage[4];
-  for (int i = 0; i < skeletonIdle.length; i++){
-    skeletonIdle[i] = loadImage("skeleton_idle" + i + ".png");
-    skeletonIdle[i].resize(gridSize*3, gridSize*3);
+  wizardIdle = new PImage[8];
+  for (int i = 0; i < wizardIdle.length; i++) {
+    wizardIdle[i] = loadImage("wizard_idle" + i + ".png");
+    wizardIdle[i].resize(gridSize*6, gridSize*6);
+  }
+
+  wizardRun = new PImage[8];
+  for (int i = 0; i < wizardRun.length; i++) {
+    wizardRun[i] = loadImage("wizard_run" + i + ".png");
+    wizardRun[i].resize(gridSize*6, gridSize*6);
+  }
+
+  wizardAttack = new PImage[8];
+  for (int i = 0; i < wizardAttack.length; i++) {
+    wizardAttack[i] = loadImage("wizard_attack" + i + ".png");
+    wizardAttack[i].resize(gridSize*6, gridSize*6);
+  }
+
+  //FIREWORM IMAGES===========
+  wormIdle = new PImage[9];
+  for (int i = 0; i < wormIdle.length; i++) {
+    wormIdle[i] = loadImage("worm_idle" + i + ".png");
+    wormIdle[i].resize(gridSize*7, gridSize*7);
   }
   
-  skeletonWalk = new PImage[4];
-    for (int i = 0; i < skeletonWalk.length; i++){ 
-    skeletonWalk[i] = loadImage("skeleton_walk" + i + ".png");
-    skeletonWalk[i].resize(gridSize*3, gridSize*3);
+    wormWalk = new PImage[9];
+  for (int i = 0; i < wormWalk.length; i++) {
+    wormWalk[i] = loadImage("worm_walk" + i + ".png");
+    wormWalk[i].resize(gridSize*7, gridSize*7);
   }
   
-    skeletonAttack = new PImage[8];
-    for (int i = 0; i < skeletonAttack.length; i++){
-    skeletonAttack[i] = loadImage("skeleton_attack" + i + ".png");
-    skeletonAttack[i].resize(gridSize*3, gridSize*3);
+    wormAttack = new PImage[16];
+  for (int i = 0; i < wormAttack.length; i++) {
+    wormAttack[i] = loadImage("worm_attack" + i + ".png");
+    wormAttack[i].resize(gridSize*7, gridSize*7);
   }
   
-  skeletonAction = skeletonIdle;
-  
-  
-  
+  fireballPic = new PImage();
+  fireballPic = loadImage("fireball.png");
+
+
+
+
+
+
 
   goomba = new PImage[2];
   goomba[0] = loadImage("goomba0.png");

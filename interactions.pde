@@ -3,6 +3,7 @@ boolean skey;
 boolean akey;
 boolean dkey;
 boolean fkey;
+boolean nkey;
 boolean upkey;
 boolean downkey;
 boolean rightkey;
@@ -14,6 +15,7 @@ void keyPressed() {
   if (key == 'a') akey = true;
   if (key == 'd') dkey = true;
   if (key == 'f') fkey = true;
+  if (key == 'n') nkey = true;
   if (keyCode == UP) upkey = true;
   if (keyCode == DOWN) downkey = true;
   if (keyCode == RIGHT) rightkey = true;
@@ -28,6 +30,7 @@ void keyReleased() {
   if (key == 'a') akey = false;
   if (key == 'd') dkey = false;
   if (key == 'f') fkey = false;
+  if (key == 'n') nkey = false;
   if (keyCode == UP) upkey = false;
   if (keyCode == DOWN) downkey = false;
   if (keyCode == RIGHT) rightkey = false;

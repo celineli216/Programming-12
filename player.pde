@@ -1,4 +1,5 @@
 //fix jump to idle animation delay
+//use checkpointList to check which checkpint player touched last
 class FPlayer extends FGameObject {
 
   int frame;
@@ -189,6 +190,10 @@ class FPlayer extends FGameObject {
       lives -= 1;
       health = 100;
     }
+    
+    if(isTouching("fireball")){
+      health -= 0.2;
+    }
 
     //slime--------
     for (FGameObject enemy : enemies) {
@@ -221,6 +226,8 @@ class FPlayer extends FGameObject {
         }
       }
     }
+    
+
     
     
     //end worm-------------

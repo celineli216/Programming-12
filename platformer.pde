@@ -1,7 +1,14 @@
 //fix bridge regen with playerDead boolean
 import fisica.*;
 FWorld world;
+FWorld level2;
+
+int currentLevel = 1;
+boolean isTransitioning = false;
+
+
 PImage map;
+PImage map2;
 PImage background;
 color white = #FFFFFF;
 color black = #000000;
@@ -26,7 +33,7 @@ color leafGreen3 = #36777a;
 
 //spikes and traps
 color spikeGrey = #b3b3b3;
-color bridgeBrown = #6b2f0c;
+color bridgeBrown = #d48231;
 
 //coin
 color coinC = #d48231;
@@ -42,11 +49,15 @@ color hammerWallC = #eb7575;
 
 color slimeC = #05c9ff;
 
-color skeletonC = #9c9c9c;
+color wizardC = #9c9c9c;
 
 color wormC = #8c8100;
 //trampoline
 color trampolineBlue = #3f37db;
+color specialTrampoline = #080a4a;
+
+//checkpoint
+color checkpointC = #f725f7;
 
 //lava
 color lavaOrange = #ffa600;
@@ -73,6 +84,10 @@ ArrayList<FGameObject> terrain;
 ArrayList<FGameObject> enemies;
 ArrayList<FGameObject> lava;
 ArrayList<FGameObject> hammerList;
+ArrayList<FGameObject> knifeList;
+ArrayList<FGameObject> fireballList;
+ArrayList<FGameObject> checkpointList;
+
 FLava lav;
 
 boolean playerDead;
@@ -81,16 +96,21 @@ FBridge br;
 
 boolean bridgeReset;
 
+int direction;
+final int R = 1;
+final int L = -1;
+
 
 //PLAYER VARIABLES===========
 
 
 
-int direction;
 
-final int L = -1;
-final int R = 1;
 
+
+
+//access
+boolean t1Access;
 
 
 
@@ -98,14 +118,16 @@ void setup() {
   //game booleans
   //playerDead = false;
   //playerDeadNum = 0;
-  
+
   rectMode(CENTER);
 
-  direction = R;
+
+
   bridgeReset = false;
   vloadImage();
   //image(background, 0, 0, 20000, 20000);
-  
+  direction = R;
+
 
 
 
@@ -118,11 +140,18 @@ void setup() {
   enemies = new ArrayList <FGameObject>();
   lava = new ArrayList <FGameObject>();
   hammerList = new ArrayList <FGameObject>();
+  knifeList = new ArrayList <FGameObject>();
+  fireballList = new ArrayList <FGameObject>();
+  checkpointList = new ArrayList <FGameObject>();
   world = new FWorld(-10000, -10000, 10000, 10000);
+  level2 = new FWorld(-10000, -10000, 10000, 10000);
   world.setGravity(0, 900);
   map = loadImage("underworld.png");
+  //map2 = loadImage("texturemap.png");
   loadWorld(map);
+  //loadWorld(map2);
   loadPlayer();
+  t1Access = false;
 }
 
 
@@ -134,19 +163,34 @@ void loadPlayer() {
   world.add(player);
 }
 void draw() {
+  if (enemies.size() == 5 && !isTransitioning) {
+    isTransitioning = true;
+    loadNextWorld(); // Transition to the next world
+  }
+  
+  if(currentLevel == 1){
 
   background(grey);
-
-
-  drawWorld();
+  } else if(currentLevel == 2){
+    background(blue);
+  }
   
 
-
+if(!isTransitioning){
+  drawWorld();
   actWorld();
+  handleAccess();
+}
 
   fill(0);
   textSize(50);
   text(player.getX() + "," + player.getY(), width/2, height/2 - 100);
+}
+
+void handleAccess() {
+  if (enemies.size() == 1) {
+    t1Access = true;
+  }
 }
 
 void actWorld() {
@@ -167,11 +211,47 @@ void actWorld() {
     FGameObject h = hammerList.get(i);
     h.act();
   }
+  for (int i =0; i < knifeList.size(); i++) {
+    FGameObject k = knifeList.get(i);
+    k.act();
+  }
+  for (int i =0; i < fireballList.size(); i++) {
+    FGameObject f = fireballList.get(i);
+    f.act();
+  }
+}
+
+void loadNextWorld() {
+  currentLevel++; // Increment the level counter
+
+  // Clear old data
+  terrain.clear();
+  enemies.clear();
+  lava.clear();
+  hammerList.clear();
+  knifeList.clear();
+  fireballList.clear();
+  checkpointList.clear();
+  bridges.clear();
+
+
+
+  world = new FWorld(-10000, -10000, 10000, 10000);
+  world.setGravity(0, 900);
+  
+    if (currentLevel == 2) {
+    map = loadImage("texturemap.png");
+  }
+  
+    loadWorld(map);
+    
+  loadPlayer();
+  isTransitioning = false;
 }
 
 void resetBridge() {
   for (FBridge bridgePiece : bridges) {
-    bridgePiece.resetToOriginal(); // Reset each piece to its original state
+    bridgePiece.resetToOriginal();
   }
 }
 

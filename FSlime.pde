@@ -143,5 +143,10 @@ class FSlime extends FGameObject {
       world.remove(this);
       enemies.remove(this);
     }
+     else if(isTouching("knife")){
+      isDead = true;
+      world.remove(this);
+      enemies.remove(this);
+    }
   }
 }//end FSlime class=========

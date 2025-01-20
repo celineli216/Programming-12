@@ -1,6 +1,8 @@
-class FSkeleton extends FGameObject {
+class FWizard extends FGameObject {
   float sx;
   float sy;
+  
+  float health;
 
   boolean willAttack;
   boolean isAttack;
@@ -15,7 +17,7 @@ class FSkeleton extends FGameObject {
 
   FBox detect;
 
-  FSkeleton(float x, float y) {
+  FWizard(float x, float y) {
     super(gridSize*2, gridSize*2);
     sx = x;
     sy = y;
@@ -29,6 +31,8 @@ class FSkeleton extends FGameObject {
     direction = R; //?
     r = true;
     l = false;
+    
+    health = 100;
 
     //FBox detect = new FBox(gridSize*10, gridSize*3);
     //detect.setNoFill();
@@ -41,48 +45,64 @@ class FSkeleton extends FGameObject {
   }
 
   void act() {
+    animateIdle();
     detectPlayer();
-    animate();
     move();
+    attack();
+    attacked();
   }
 
-  void animate() {
-    if (frame >= skeletonAction.length) frame = 0;
-    if (frameCount % 2 == 0) {
-      skeletonAction[frame].resize(gridSize*6, gridSize*6);
-      if (r )attachImage(skeletonAction[frame]);
-      if (l ) attachImage(reverseImage(skeletonAction[frame]));
+  //void animate() {
+  //  if (frame >= skeletonAction.length) frame = 0;
+  //  if (frameCount % 2 == 0) {
+  //    skeletonAction[frame].resize(gridSize*6, gridSize*6);
+  //    if (r)attachImage(skeletonAction[frame]);
+  //    if (l) attachImage(reverseImage(skeletonAction[frame]));
+  //    frame++;
+  //  }
+  //}
+  
+
+
+  
+  void attack() {
+        if (isTouching("player")) {
+      isAttack = true;
+      animateAttack();
+      //skeletonAction = skeletonAttack;
+    } else {
+      isAttack = false;
+    }
+  }
+  
+  void animateAttack() {
+    if (frame >= wizardAttack.length) frame = 0;
+
+      if (frameCount % 5 == 0) {
+      if (r) attachImage(wizardAttack[frame]);
+      if (l) attachImage(reverseImage(wizardAttack[frame]));
       frame++;
     }
   }
-  void attack() {
+  void animateWalk() {
+    if (frame >= wizardRun.length) frame = 0;
+
+    if (frameCount % 5 == 0) {
+      if (r) attachImage(wizardRun[frame]);
+      if (l) attachImage(reverseImage(wizardRun[frame]));
+      frame++;
+    }
   }
-  //void animateAttack() {
-  //  if (frame >= skeletonAttack.length) frame = 0;
 
-  //  if (frameCount % 5 == 0) {
-  //    attachImage(skeletonAttack[frame]);
-  //    frame++;
-  //  }
-  //}
-  //void animateWalk() {
-  //  if (frame >= skeletonWalk.length) frame = 0;
+  void animateIdle() {
+    if (frame >= wizardIdle.length) frame = 0;
 
-  //  if (frameCount % 5 == 0) {
-  //    if (r) attachImage(skeletonWalk[frame]);
-  //    if (l) attachImage(reverseImage(skeletonWalk[frame]));
-  //    frame++;
-  //  }
-  //}
-
-  //void animateIdle() {
-  //  if (frame >= skeletonIdle.length) frame = 0;
-
-  //  if (frameCount % 5 == 0) {
-  //    attachImage(skeletonIdle[frame]);
-  //    frame++;
-  //  }
-  //}
+     if (frameCount % 5 == 0) {
+      if (r) attachImage(wizardIdle[frame]);
+      if (l) attachImage(reverseImage(wizardIdle[frame]));
+      frame++;
+    }
+  }
 
   void detectPlayer() {
     if (player.getX() > getX()) {
@@ -116,12 +136,33 @@ class FSkeleton extends FGameObject {
 
     if (r == true && willAttack == true) {
       setVelocity(speed, vy);
-      skeletonAction = skeletonWalk;
+      animateWalk();
+      //skeletonAction = skeletonWalk;
     }
-
+    
     if (l == true && willAttack == true) {
+      animateWalk();
       setVelocity(-speed, vy);
-      skeletonAction = skeletonWalk;
+      //skeletonAction = skeletonWalk;
     }
+   
   }
-}
+  
+  
+    void attacked(){
+    if(isTouching("knightAttackBox")){
+      health -= 2;
+      }
+      
+    else if(isTouching("knife")){
+      health -= 2;
+      }
+      if(health <= 0){
+      isDead = true;
+      world.remove(this);
+      enemies.remove(this);
+      }
+    
+  }
+  
+} //end wizard class=========================================

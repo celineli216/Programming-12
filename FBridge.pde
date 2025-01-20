@@ -1,4 +1,5 @@
 class FBridge extends FGameObject {
+  //bridge doesn't reset for hte bottom lava
   float bridgeOriginalX, bridgeOriginalY;
   FBridge(float x, float y) {
     super(gridSize, gridSize);
