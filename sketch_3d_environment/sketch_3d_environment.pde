@@ -1,3 +1,4 @@
+
 import java.awt.Robot;
 //colours
 color darkBlue = #3f37db;
@@ -7,21 +8,27 @@ color white = #FFFFFF;
 Robot rbt;
 boolean skipFrame;
 
+
 //map variables
 int gridSize;
 PImage map;
-boolean wkey, akey, skey, dkey;
+PImage map2;
+boolean wkey, akey, skey, dkey, spacekey;
 float eyeX, eyeY, eyeZ, focusX, focusY, focusZ, tiltX, tiltY, tiltZ;
 float leftRightHeadAngle, upDownHeadAngle;
 PImage brick;
 PImage diamond;
+PImage oakPlank;
 
+ArrayList<GameObject> objects;
 
 
 void setup() {
   //textures
+  objects = new ArrayList<GameObject>();
   brick = loadImage("Stone_Bricks.png");
   diamond = loadImage("Diamond.png");
+  oakPlank = loadImage("oak_plank.png");
   fullScreen(P3D);
   //size(displayWidth, displayHeight, P3D);
   textureMode(NORMAL);
@@ -39,7 +46,8 @@ void setup() {
   tiltZ = 0;
 
   //initialize map
-  map = loadImage("map.png");
+  
+  map2 = loadImage("map2.png");
   gridSize = 100;
 
   leftRightHeadAngle = 0;
@@ -50,97 +58,39 @@ void setup() {
   catch(Exception e) {
     e.printStackTrace();
   }
-  skipFrame = false;
+  skipFrame = false; 
+  
+  //targets
+  //Target target = new Target( random(-800, 800), height - gridSize/2, random(-800, 800), 50);
+   //Target target = new Target( 500, height, 3200, 50);
+  for (int i = 0; i < 5; i++){
+    objects.add(new Target( random(-800, 800), height - gridSize/2, random(-800, 800), 50));
+  }
 }
 
 void draw() {
   background(0);
+  //lights();
+  pointLight(255, 255, 255, eyeX, eyeY, eyeZ);
   camera(eyeX, eyeY, eyeZ, focusX, focusY, focusZ, tiltX, tiltY, tiltZ);
+  fill(0, 255, 0);
+  println();
 
   drawFloor(-2000, 2000, height, 100);  //floor
-  drawFloor(-2000, 2000, height-gridSize*3, 100); //ceiling
+  drawFloor(-2000, 2000, height-gridSize*4, gridSize); //ceiling
   drawFocalPoint();
   controlCamera();
   drawMap();
-}
-
-void drawMap() {
-  for (int x = 0; x < map.width; x++) {
-    for (int y = 0; y < map.height; y ++) {
-      color c = map.get(x, y);
-      if (c == lightBlue) {
-        for(int i =1; i< 4; i++){
-        texturedCube(x*gridSize-2000, height-(gridSize*i), y*gridSize-2000, brick, gridSize);
-        }
-      }
-      else if (c == black) {
-        for(int i =1; i< 4; i++){
-        texturedCube(x*gridSize-2000, height-(gridSize*i), y*gridSize-2000, diamond, gridSize);
-        }
-      }
+  
+  int i = 0;
+  while(i<objects.size()) {
+    GameObject obj = objects.get(i);
+    obj.act();
+    obj.show();
+    if(obj.lives == 0){
+      objects.remove(i);
+    } else{
+      i++;
     }
   }
-} //end drawMap
-
-void drawFocalPoint() {
-  pushMatrix();
-  translate(focusX, focusY, focusZ);
-  sphere(5);
-  popMatrix();
-}
-
-
-void drawFloor(int sx, int ex, int y, int i) {
-  stroke(255);
-
-
-  for (int x = sx; x <= ex; x += i) {
-    line(x, y, -2000, x, y, 2000);
-    line(-2000, y, x, 2000, y, x); // x, y, z, x, y, z
-  }
-}
-
-void controlCamera() {
-
-  if (wkey) {
-    eyeX = eyeX + cos(leftRightHeadAngle) * 10;
-    eyeZ = eyeZ + sin(leftRightHeadAngle) * 10;
-  }
-  if (skey) {
-    eyeX = eyeX - cos(leftRightHeadAngle) * 10;
-    eyeZ = eyeZ - sin(leftRightHeadAngle) * 10;
-  }
-  if (akey) {
-    eyeX = eyeX + cos(leftRightHeadAngle + radians(90)) * 10;
-    eyeZ = eyeZ + sin(leftRightHeadAngle + radians(90)) * 10;
-  }
-  if (dkey) {
-    eyeX = eyeX - cos(leftRightHeadAngle + radians(90)) * 10;
-    eyeZ = eyeZ - sin(leftRightHeadAngle + radians(90)) * 10;
-  }
-
-
-
-  if (skipFrame == false) {
-    leftRightHeadAngle = leftRightHeadAngle + (mouseX - pmouseX) * 0.01;
-    upDownHeadAngle = upDownHeadAngle + (mouseY - pmouseY) * 0.01;
-  }
-
-  if (upDownHeadAngle > PI/2.5) upDownHeadAngle = -PI/2.5;
-  if (upDownHeadAngle < -PI/2.5) upDownHeadAngle = -PI/2.5;
-
-  focusX = eyeX + cos(leftRightHeadAngle) * 300;
-  focusZ = eyeZ + sin(leftRightHeadAngle) * 300;
-  focusY = eyeY + tan(upDownHeadAngle)*300;
-
-  if (mouseX < 2) {
-    rbt.mouseMove(width-3, mouseY);
-    skipFrame = true;
-  } else if (mouseX > width-2) {
-    rbt.mouseMove(3, mouseY);
-    skipFrame = true;
-  } else {
-    skipFrame = false;
-  }
-  println(eyeX, eyeY, eyeZ);
 }
