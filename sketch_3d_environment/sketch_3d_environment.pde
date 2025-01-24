@@ -21,11 +21,15 @@ PImage diamond;
 PImage oakPlank;
 
 ArrayList<GameObject> objects;
+ArrayList<Target> targetList;
+ArrayList<Bullet> bulletList;
 
 
 void setup() {
   //textures
   objects = new ArrayList<GameObject>();
+  targetList = new ArrayList<Target>();
+  bulletList = new ArrayList<Bullet>();
   brick = loadImage("Stone_Bricks.png");
   diamond = loadImage("Diamond.png");
   oakPlank = loadImage("oak_plank.png");
@@ -64,7 +68,7 @@ void setup() {
   //Target target = new Target( random(-800, 800), height - gridSize/2, random(-800, 800), 50);
    //Target target = new Target( 500, height, 3200, 50);
   for (int i = 0; i < 5; i++){
-    objects.add(new Target( random(-800, 800), height - gridSize/2, random(-800, 800), 50));
+    targetList.add(new Target( random(-800, 800), height - gridSize/2, random(-800, 800), 50));
   }
 }
 
@@ -87,10 +91,26 @@ void draw() {
     GameObject obj = objects.get(i);
     obj.act();
     obj.show();
+    
     if(obj.lives == 0){
       objects.remove(i);
     } else{
       i++;
     }
+  }
+  
+  for (int a = 0; a < bulletList.size(); a++){
+    Bullet b = bulletList.get(a);
+    
+    b.act();
+    
+  }
+  
+  for(int r =0; r < targetList.size(); r++){
+    Target t = targetList.get(r);
+    t.act();
+    t.show();
+    
+  
   }
 }

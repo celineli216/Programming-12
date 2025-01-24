@@ -1,7 +1,7 @@
 class Target extends GameObject {
   PVector dir;
-  color ogC = lightBlue;
-  color hitC = darkBlue;
+  color tC;
+
   int timer;
   boolean isHit;
 
@@ -11,6 +11,8 @@ class Target extends GameObject {
     dir.setMag(2);
     timer = 0;
     isHit = false;
+    tC = lightBlue;
+    s = size;
   }
 
   void act() {
@@ -20,22 +22,31 @@ class Target extends GameObject {
     if (loc.z > 800 || loc.z < -800) dir.z *= -1;
     
     if (timer > 0) timer--;
+    if(timer == 0){
+      tC = lightBlue;
+      isHit = false;
+    }
     
-    println(isHit);
+    //println(isHit);
   }
   
   void show(){
     pushMatrix();
     translate(loc.x, loc.y, loc.z);
-    if(timer > 0) fill(hitC);
-    else fill(ogC);
+
+    fill(tC);
     
     box(size);
     popMatrix();
+    
+   
   }
   
   void bulletHit(){
+    tC = darkBlue;
     timer = 60;
+    
     isHit = true;
-  }
+    println("Target hit! isHit set to: " + isHit);
 }
+  }

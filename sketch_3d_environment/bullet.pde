@@ -1,8 +1,8 @@
-class Bullet extends GameObject{
+class Bullet extends GameObject {
   PVector dir;
   float speed;
-  
-  Bullet(){
+
+  Bullet() {
     super(eyeX, eyeY, eyeZ, 10);
     speed = 50;
     float vx = cos(leftRightHeadAngle);
@@ -10,40 +10,49 @@ class Bullet extends GameObject{
     float vz = sin(leftRightHeadAngle);
     dir = new PVector(vx, vy, vz);
     dir.setMag(speed);
-    
   }
-  
-  void act(){
+
+  void act() {
+    handleTarget();
+    
     int hitx = int(loc.x+2000)/gridSize;
     int hity = int(loc.z+2000)/gridSize;
-    if(map2.get(hitx, hity) == white){
+
+    if (map2.get(hitx, hity) == white) {
+     
       loc.add(dir);
-    } else{
+
+
+    } else {
       lives = 0;
-      println("bullet hit wall");
-      
-      for(int i =0; i < 5; i++){
+   
+
+      for (int i =0; i < 5; i++) {
         objects.add(new Particle(loc));
       }
-    }//end else
-    
-    
-  }//end act
-  
-  void handleTarget(){
-    int i =0;
-    while(i < objects.size()){
-      GameObject obj = objects.get(i);
       
-      if( PVector.dist(loc, obj.loc) < obj.size/2){
-          obj.bulletHit();
+     
+    }//end else
+  }//end act
+
+  void handleTarget(){
+      for (int i= 0; i < targetList.size(); i++) {
+        Target t = targetList.get(i);
+        
+        float distance = dist(loc.x, loc.y, loc.z, t.loc.x, t.loc.y, t.loc.z);
+        //if (PVector.dist(loc, t.loc) < t.size/2) {
+          println("Bullet: " + loc + ", Target: " + t.loc + ", Distance: " + distance);
+
+        if( distance < t.size/2){
+          
+          t.bulletHit();
           lives = 0;
-          break;
+            for (int p =0; p < 5; p++) {
+        objects.add(new Particle(loc));
       }
-      i++;
-    }
+         
+        }
+      }//end for loop
   
-  }
-
-
+}//end handle target
 }
