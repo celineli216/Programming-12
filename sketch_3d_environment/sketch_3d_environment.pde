@@ -25,6 +25,8 @@ ArrayList<Target> targetList;
 ArrayList<Bullet> bulletList;
 
 
+
+
 void setup() {
   //textures
   objects = new ArrayList<GameObject>();
@@ -48,6 +50,8 @@ void setup() {
   tiltX = 0;
   tiltY = 1;
   tiltZ = 0;
+  
+
 
   //initialize map
   
@@ -78,7 +82,7 @@ void draw() {
   pointLight(255, 255, 255, eyeX, eyeY, eyeZ);
   camera(eyeX, eyeY, eyeZ, focusX, focusY, focusZ, tiltX, tiltY, tiltZ);
   fill(0, 255, 0);
-  println();
+ 
 
   drawFloor(-2000, 2000, height, 100);  //floor
   drawFloor(-2000, 2000, height-gridSize*4, gridSize); //ceiling

@@ -41,7 +41,7 @@ class Bullet extends GameObject {
         
         float distance = dist(loc.x, loc.y, loc.z, t.loc.x, t.loc.y, t.loc.z);
         //if (PVector.dist(loc, t.loc) < t.size/2) {
-          println("Bullet: " + loc + ", Target: " + t.loc + ", Distance: " + distance);
+          
 
         if( distance < t.size/2){
           

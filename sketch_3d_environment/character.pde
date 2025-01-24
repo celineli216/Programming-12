@@ -20,7 +20,7 @@ void controlCamera() {
   if(spacekey){
     Bullet bullet  = new Bullet();
     objects.add(bullet);
-    println("bullet location: ", bullet.loc);
+    
     
   }
 

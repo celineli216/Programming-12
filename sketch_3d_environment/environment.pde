@@ -19,6 +19,8 @@ void drawMap() {
 void drawFocalPoint() {
   pushMatrix();
   translate(focusX, focusY, focusZ);
+
+
   fill(255, 0, 0);
   sphere(2);
   popMatrix();

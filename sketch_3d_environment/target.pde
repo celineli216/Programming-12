@@ -4,6 +4,8 @@ class Target extends GameObject {
 
   int timer;
   boolean isHit;
+  
+  
 
   Target(float x, float y, float z, float s) {
     super(x, y, z, s);
@@ -13,6 +15,7 @@ class Target extends GameObject {
     isHit = false;
     tC = lightBlue;
     s = size;
+ 
   }
 
   void act() {
@@ -31,6 +34,7 @@ class Target extends GameObject {
   }
   
   void show(){
+
     pushMatrix();
     translate(loc.x, loc.y, loc.z);
 
@@ -38,15 +42,15 @@ class Target extends GameObject {
     
     box(size);
     popMatrix();
-    
+ 
    
   }
   
   void bulletHit(){
     tC = darkBlue;
     timer = 60;
-    
+ 
     isHit = true;
-    println("Target hit! isHit set to: " + isHit);
+    
 }
   }
